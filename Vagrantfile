@@ -21,9 +21,24 @@ Vagrant.configure("2") do |config|
 		"advertise_addr": "#{serverIp}",
 		"client_addr": "#{serverIp}",
 		"data_dir": "/tmp/consul",
-		"bootstrap_expect": 1
+		"bootstrap_expect": 1,
+		"connect" : {
+	      "enabled": true
+	    },
+		{
+		  "primary_datacenter": "dc1",
+		  "acl": {
+			"enabled": true,
+			"default_policy": "deny",
+			"down_policy": "extend-cache",
+			"tokens": {
+			  "agent": "77fe2d1a-a6e5-6232-df82-207299aae3ab"
+			}
+		  }
+		}
 	}
   )
+
 
   create_consul_host config, "consul-server", serverIp, serverInit
 
@@ -35,7 +50,18 @@ Vagrant.configure("2") do |config|
 		{
 			"advertise_addr": "#{clientIp}",
 			"retry_join": ["#{serverIp}"],
-			"data_dir": "/tmp/consul"
+			"data_dir": "/tmp/consul",
+		{
+		  "primary_datacenter": "dc1",
+		  "acl": {
+			"enabled": true,
+			"default_policy": "deny",
+			"down_policy": "extend-cache",
+			"tokens": {
+			  "agent": "77fe2d1a-a6e5-6232-df82-207299aae3ab"
+			}
+		  }
+		}
 		}
 	)
 
